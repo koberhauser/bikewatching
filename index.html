@@ -13,12 +13,29 @@
         />
         <script src="map.js" type="module"></script>
         <link rel="stylesheet" href="map.css" />
-    </head>
-    <body>
-        <h1>🚴‍♀️ Bikewatching</h1>
-        <p>Exploring bike traffic patterns across Boston and Cambridge.</p>
-        <div id="map">
-            <svg></svg>
-        </div>
-    </body>
+
+        </head>
+        <body>
+            <header>
+                <h1>🚴‍♀️ Bikewatching</h1>
+
+                <label>
+                    Filter by time:
+                    <input
+                        id="time-slider"
+                        type="range"
+                        min="-1"
+                        max="1440"
+                        value="-1"
+                    />
+                    <time id="selected-time"></time>
+                    <em id="any-time">(any time)</em>
+                </label>
+            </header>
+
+            <p>Exploring bike traffic patterns across Boston and Cambridge.</p>
+            <div id="map">
+                <svg></svg>
+            </div>
+        </body>
 </html>
