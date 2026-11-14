@@ -22,6 +22,11 @@ const bikeLaneStyle = {
     'line-opacity': 0.6,
 };
 
+const stationFlow = d3
+    .scaleQuantize()
+    .domain([0, 1])
+    .range([0, 0.5, 1]);
+
 const svg = d3.select('#map').select('svg');
 
 function getCoords(station) {
@@ -146,10 +151,12 @@ map.on('load', async () => {
             .enter()
             .append('circle')
             .attr('r', (d) => radiusScale(d.totalTraffic))
-            .attr('fill', 'steelblue')
             .attr('stroke', 'white')
             .attr('stroke-width', 1)
             .attr('opacity', 0.8)
+            .style('--departure-ratio', (d) =>
+                stationFlow(d.totalTraffic ? d.departures / d.totalTraffic : 0.5)
+            )
             .each(function (d) {
                 d3.select(this)
                     .append('title')
@@ -181,7 +188,6 @@ map.on('load', async () => {
 
         let timeFilter = -1;
 
-
         // Update station circles based on selected time
         function updateScatterPlot(timeFilter) {
             // Filter trips to the selected time window
@@ -199,6 +205,9 @@ map.on('load', async () => {
             circles
                 .data(filteredStations, (d) => d.short_name)
                 .attr('r', (d) => radiusScale(d.totalTraffic))
+                .style('--departure-ratio', (d) =>
+                    stationFlow(d.totalTraffic ? d.departures / d.totalTraffic : 0.5)
+                )
                 .select('title')
                 .text(
                     (d) => `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`
@@ -228,3 +237,4 @@ map.on('load', async () => {
         console.error('Error loading JSON:', error);
     }
 });
+
